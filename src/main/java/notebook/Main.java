@@ -17,5 +17,6 @@ public class Main {
                 "My Notebook",
                 commands);
         shell.commandLoop();
+        System.out.println("CHAU!");
     }
 }
