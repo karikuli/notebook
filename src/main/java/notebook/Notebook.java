@@ -97,7 +97,30 @@ public class Notebook implements ShellDependent {
         return result;
     }
 
+    @Command
+    public List<Record> listExpired() {
+        ArrayList<Record> result = new ArrayList<>();
+        for (Record r : records) {
+            if (r instanceof Expirable) {
+                Expirable e = (Expirable) r;
+                if (e.isExpired()) {
+                    result.add(r);
+                }
+            }
+        }
+        return result;
+    }
 
+    @Command
+    public void dismiss(int id) {
+        Record r = find(id);
+        if (r instanceof Expirable) {
+            Expirable e = (Expirable) r;
+            e.dismiss();
+        } else {
+            System.out.println("this is not an expirable");
+        }
+    }
 
 //    @Command
 //    public Person addPhone(int id, String phone){
