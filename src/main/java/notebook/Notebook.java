@@ -1,15 +1,21 @@
 package notebook;
 
 import asg.cliche.Command;
+import asg.cliche.Shell;
+import asg.cliche.ShellDependent;
+import asg.cliche.ShellFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by karikuli on 09.05.2017.
  */
-public class Notebook {
+public class Notebook implements ShellDependent {
     ArrayList<Record> records = new ArrayList<>();
+    private Shell parentShell;
 
     @Command
     public ArrayList<Record> List() {
@@ -46,6 +52,52 @@ public class Notebook {
         records.add(result);
         return result;
     }
+
+    @Command
+    public Alarm createAlarm(String note, String alarm) {
+        Alarm result = new Alarm();
+        result.setTime(alarm);
+        result.setNote(note);
+        records.add(result);
+        return result;
+    }
+
+    @Command
+    public Record edit(int id) throws IOException {
+        Record r = find(id);
+        if (r != null) {
+            Shell shell = ShellFactory.createSubshell("#" + id, parentShell, "Editing record #" + id, r);
+            shell.commandLoop();
+        }
+        return r;
+    }
+
+    private Record find(int id) {
+        for (Record r : records) {
+            if (r.getId() == id) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void cliSetShell(Shell theShell) {
+        this.parentShell = theShell;
+    }
+
+    @Command
+    public List<Record> find(String str) {
+        ArrayList<Record> result = new ArrayList<>();
+        for (Record r : records) {
+            if (r.contains(str)) {
+                result.add(r);
+            }
+        }
+        return result;
+    }
+
+
 
 //    @Command
 //    public Person addPhone(int id, String phone){

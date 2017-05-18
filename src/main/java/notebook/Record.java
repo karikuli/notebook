@@ -18,5 +18,8 @@ public abstract class Record {
         return id;
     }
 
+    public boolean contains(String str) {
+        return String.valueOf(id).contains(str);
+    }
 
 }

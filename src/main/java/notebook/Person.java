@@ -69,4 +69,20 @@ public class Person extends Note {
     public void addPhone(String phone) {
         phones.add(phone);
     }
+
+    @Override
+    public boolean contains(String str) {
+        if (firstName.contains(str)) {
+            return true;
+        } else if (lastName.contains(str)) {
+            return true;
+        } else {
+            for (String p : getPhone()) {
+                if (p.contains(str)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
